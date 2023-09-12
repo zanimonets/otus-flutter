@@ -1,0 +1,39 @@
+{
+  "receipts": [
+    {
+      "title": "Лосось в соусе терияки",
+      "imageAsset": "assets/images/salmon_1.png",
+      "cookingTime": "45 мин"
+    },
+    {
+      "title": "Поке боул с сыром тофу",
+      "imageAsset": "assets/images/poke_1.png",
+      "cookingTime": "30 мин"
+    },
+    {
+      "title": "Стейк из говядины по-грузински с кукурузой",
+      "imageAsset": "assets/images/steak_1.png",
+      "cookingTime": "1 час 15 минут"
+    },
+    {
+      "title": "Тосты с голубикой и бананом",
+      "imageAsset": "assets/images/toast_1.png",
+      "cookingTime": "45 минут"
+    },
+    {
+      "title": "Паста с морепродуктами",
+      "imageAsset": "assets/images/pasta_1.png",
+      "cookingTime": "45 минут"
+    },
+    {
+      "title": "Бургер с двумя котлетами",
+      "imageAsset": "assets/images/burger_1.png",
+      "cookingTime": "1 час"
+    },
+    {
+      "title": "Пицца Маргарита домашняя",
+      "imageAsset": "assets/images/pizza_1.png",
+      "cookingTime": "25 минут"
+    }
+  ]
+}
