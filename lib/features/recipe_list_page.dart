@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:otus_home_2/features/recipe_detail_page.dart';
 import 'package:otus_home_2/objects/recipe.dart';
 import 'package:otus_home_2/features/recipe_card.dart';
 
@@ -18,6 +19,16 @@ class RecipeListPage extends StatelessWidget {
               height: 16.0);
         },
         itemBuilder: (context, index) {
+          return GestureDetector(
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => RecipeDetailPage(recipe: recipes[index]),
+                ),
+              );
+            },
+            child: RecipeCard(recipe: recipes[index]),
+          );
           return RecipeCard(recipe: recipes[index]);
         },
       ),

@@ -9,7 +9,7 @@ class DataParse {
     await DefaultAssetBundle.of(context).loadString('assets/data/receipts.json');
 
     final Map<String, dynamic> jsonData = json.decode(jsonString);
-    final List<dynamic> jsonList = jsonData['receipts'];
+    final List jsonList = jsonData['receipts'];
     final List<Recipe> recipes =
     jsonList.map((json) => Recipe.fromJson(json)).toList();
     return recipes;

@@ -5,16 +5,32 @@ import 'features/recipe_list_page.dart';
 import 'objects/recipe.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  Future<List<Recipe>>? _recipeFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _recipeFuture = DataParse.loadRecipes(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(fontFamily: AppStyles.primaryFont),
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(fontFamily: AppStyles.primaryFont,colorScheme: ColorScheme.light().copyWith(primary: AppStyles.primaryGreyColor )),
       home: FutureBuilder(
-        future: DataParse.loadRecipes(context),
+        future: _recipeFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const CircularProgressIndicator();
@@ -30,6 +46,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-
-

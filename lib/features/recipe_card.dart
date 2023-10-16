@@ -33,7 +33,7 @@ class RecipeCard extends StatelessWidget {
                     padding: const EdgeInsets.only(bottom: 15.0),
                     child: Text(
                       recipe.title,
-                      style: AppStyles.receiptLabelTextStyle,
+                      style: AppStyles.recipeCardStyle.label,
                     ),
                   ),
                   subtitle: Row(
@@ -47,7 +47,7 @@ class RecipeCard extends StatelessWidget {
                       ),
                       Text(
                         recipe.cookingTime,
-                        style: AppStyles.totalCookingTimeTextStyle,
+                        style: AppStyles.recipeCardStyle.totalCookingTime,
                       ),
                     ],
                   ),
