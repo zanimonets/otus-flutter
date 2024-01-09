@@ -3,9 +3,9 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:otus_home_2/features/recipe_details/comments.dart';
 import 'package:otus_home_2/features/recipe_details/ingredients_list.dart';
 import 'package:otus_home_2/features/recipe_details/recipe_steps_list.dart';
-
-import '../objects/recipe.dart';
+import '../objects/meals.dart';
 import '../styles/app_styles.dart';
+import 'food_image.dart';
 
 class RecipeDetailPage extends StatefulWidget {
   final Recipe recipe;
@@ -54,7 +54,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                 children: [
                   Expanded(
                     child: Text(
-                      widget.recipe.title,
+                      widget.recipe.strMeal!,
                       style: AppStyles.recipeCardStyle.label,
                     ),
                   ),
@@ -63,7 +63,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                     onTap: () {
                       setState(() {
                         isFavorite = !isFavorite;
-                        isBookmarked = isFavorite ? true : false;
+                        isBookmarked = isFavorite;
                         if (isFavorite) {
                           bookmarkCounter++;
                         } else {
@@ -73,10 +73,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                     },
                     child: Icon(
                       isFavorite ? Icons.favorite : Icons.favorite_border,
-                      color: isFavorite
-                          ? AppStyles.primaryGreyColor
-                          : AppStyles
-                              .primaryGreyColor,
+                      color: AppStyles.primaryGreyColor
                     ),
                   ),
                 ],
@@ -94,7 +91,8 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                         ),
                       ),
                       Text(
-                        widget.recipe.cookingTime,
+                        // widget.recipe.cookingTime,
+                        "Not defined",
                         style: AppStyles.recipeCardStyle.totalCookingTime,
                       ),
                     ],
@@ -106,10 +104,11 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                         width: double.infinity,
                         height: 320.0,
                         color: Colors.white,
-                        child: Image.asset(
-                          widget.recipe.imageAsset,
-                          fit: BoxFit.fitWidth
-                        ),
+                          child: FoodImage(imageUrl:widget.recipe.strMealThumb!)
+                        // child: Image.asset(
+                        //   widget.recipe.strMealThumb!,
+                        //   fit: BoxFit.fitWidth
+                        // ),
                       ),
                       if (bookmarkCounter > 0)
                       Positioned(

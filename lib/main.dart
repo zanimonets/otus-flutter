@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:otus_home_2/objects/meals.dart';
 import 'package:otus_home_2/styles/app_styles.dart';
 import 'utils/data_parser.dart';
 import 'features/recipe_list_page.dart';
-import 'objects/recipe.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -16,11 +18,12 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  Future<List<Recipe>>? _recipeFuture;
+  late Future<List<Recipe>> _recipeFuture;
 
   @override
   void initState() {
     super.initState();
+
     _recipeFuture = DataParse.loadRecipes(context);
   }
 
@@ -33,9 +36,9 @@ class _MyAppState extends State<MyApp> {
         future: _recipeFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator();
+            return const Center(child: SizedBox(width: 25, height: 25, child: CircularProgressIndicator()));
           } else if (snapshot.hasError) {
-            print(snapshot.error);
+            debugPrint('!!!DEBUG $snapshot.error');
             return const Text('Data loading error');
           } else {
             final List<Recipe> recipes = snapshot.data as List<Recipe>;

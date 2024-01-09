@@ -8,24 +8,24 @@ class RecipeComment {
   RecipeComment(this.author, this.text);
 }
 
-List<RecipeComment> comments = [];
+List<RecipeComment> _comments = [];
 
 void addComment(String author, String text) {
-  comments.add(RecipeComment(author, text));
+  _comments.add(RecipeComment(author, text));
 }
 
 void deleteComment(int index) {
-  comments.removeAt(index);
+  _comments.removeAt(index);
 }
 
 class RecipeComments extends StatefulWidget {
   const RecipeComments({super.key});
 
   @override
-  _RecipeCommentsState createState() => _RecipeCommentsState();
+  RecipeCommentsState createState() => RecipeCommentsState();
 }
 
-class _RecipeCommentsState extends State<RecipeComments> {
+class RecipeCommentsState extends State<RecipeComments> {
   final TextEditingController _authorController = TextEditingController();
   final TextEditingController _textController = TextEditingController();
 
@@ -49,9 +49,9 @@ class _RecipeCommentsState extends State<RecipeComments> {
           Expanded(
             child: ListView.builder(
               scrollDirection: Axis.vertical,
-              itemCount: comments.length,
+              itemCount: _comments.length,
               itemBuilder: (context, index) {
-                final comment = comments[index];
+                final comment = _comments[index];
                 return ListTile(
                   title: Text(comment.author),
                   subtitle: Text(comment.text),
