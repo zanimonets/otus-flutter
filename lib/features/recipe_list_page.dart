@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:otus_home_2/features/recipe_detail_page.dart';
-import 'package:otus_home_2/objects/recipe.dart';
 import 'package:otus_home_2/features/recipe_card.dart';
+import '../objects/meals.dart';
 
 class RecipeListPage extends StatelessWidget {
   final List<Recipe> recipes;

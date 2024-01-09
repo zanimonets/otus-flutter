@@ -1,24 +1,23 @@
 import 'package:flutter/material.dart';
-
-import '../../objects/recipe.dart';
+import '../../objects/meals.dart';
 import '../../styles/app_styles.dart';
 
 class RecipeStepsList extends StatefulWidget {
   final Recipe recipe;
 
-  RecipeStepsList({Key? key, required this.recipe}) : super(key: key);
+  const RecipeStepsList({Key? key, required this.recipe}) : super(key: key);
 
   @override
-  _RecipeStepsListState createState() => _RecipeStepsListState();
+  RecipeStepsListState createState() => RecipeStepsListState();
 }
 
-class _RecipeStepsListState extends State<RecipeStepsList> {
+class RecipeStepsListState extends State<RecipeStepsList> {
   List<bool> stepCheckedList = [];
 
   @override
   void initState() {
     super.initState();
-    stepCheckedList = List.generate(widget.recipe.receiptSteps.length, (index) => false);
+    stepCheckedList = List.generate(widget.recipe.getDescriptionsBySteps().length, (index) => false);
   }
 
   @override
@@ -26,12 +25,12 @@ class _RecipeStepsListState extends State<RecipeStepsList> {
     return ListView.builder(
       scrollDirection: Axis.vertical,
       shrinkWrap: true,
-      itemCount: widget.recipe.receiptSteps.length,
+      itemCount: widget.recipe.getDescriptionsBySteps().length,
       itemBuilder: (context, index) {
-        final item = widget.recipe.receiptSteps[index];
-        final step = item["step"];
-        final description = item["description"];
-        final time = item["time"];
+        final item = widget.recipe.getDescriptionsBySteps()[index];
+        final String step = (index+1).toString();
+        final description = item;
+        const time = "No time";
         final isChecked = stepCheckedList[index];
 
         return GestureDetector(
@@ -41,8 +40,8 @@ class _RecipeStepsListState extends State<RecipeStepsList> {
             });
           },
           child: Container(
-            margin: EdgeInsets.only(left: 16.0, right: 16.0, bottom: 10),
-            padding: EdgeInsets.all(16.0),
+            margin: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 10),
+            padding: const EdgeInsets.all(16.0),
             decoration: BoxDecoration(
               color: AppStyles.backgroundGreyColor,
               border: Border.all(
@@ -69,17 +68,15 @@ class _RecipeStepsListState extends State<RecipeStepsList> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Container(
-                      child: Checkbox(
-                        value: isChecked,
-                        onChanged: (bool? value) {
-                          setState(() {
-                            stepCheckedList[index] = value ?? false;
-                          });
-                        },
-                        activeColor: Colors.grey,
-                        checkColor: Colors.white,
-                      ),
+                    Checkbox(
+                      value: isChecked,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          stepCheckedList[index] = value ?? false;
+                        });
+                      },
+                      activeColor: Colors.grey,
+                      checkColor: Colors.white,
                     ),
                     Text(time, style: AppStyles.recipeStepsStyle.time),
                   ],

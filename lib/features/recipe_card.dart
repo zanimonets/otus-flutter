@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:otus_home_2/objects/recipe.dart';
 import 'package:otus_home_2/styles/app_styles.dart';
+import '../objects/meals.dart';
+import 'food_image.dart';
 
 class RecipeCard extends StatelessWidget {
   final Recipe recipe;
@@ -18,11 +19,7 @@ class RecipeCard extends StatelessWidget {
         children: [
           Expanded(
             flex: 1,
-            child: Image.asset(
-              recipe.imageAsset,
-              fit: BoxFit.cover,
-              height: 120.0,
-            ),
+            child: FoodImage(imageUrl:recipe.strMealThumb!),
           ),
           Expanded(
             flex: 2,
@@ -32,7 +29,7 @@ class RecipeCard extends StatelessWidget {
                   title: Padding(
                     padding: const EdgeInsets.only(bottom: 15.0),
                     child: Text(
-                      recipe.title,
+                      recipe.strMeal!,
                       style: AppStyles.recipeCardStyle.label,
                     ),
                   ),
@@ -46,7 +43,8 @@ class RecipeCard extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        recipe.cookingTime,
+                        // recipe.cookingTime,
+                        "Not defined",
                         style: AppStyles.recipeCardStyle.totalCookingTime,
                       ),
                     ],
