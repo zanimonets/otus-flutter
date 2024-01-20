@@ -29,7 +29,7 @@ class IngredientsList extends StatelessWidget {
     }
 
     return ListView(
-      scrollDirection: Axis.vertical,
+      physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       children: ingredientWidgets,
     );
