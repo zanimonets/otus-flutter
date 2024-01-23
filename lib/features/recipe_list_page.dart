@@ -22,14 +22,26 @@ class RecipeListPage extends StatelessWidget {
           return GestureDetector(
             onTap: () {
               Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => RecipeDetailPage(recipe: recipes[index]),
+                PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) {
+                    return RecipeDetailPage(recipe: recipes[index]);
+                  },
+                  transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                    const begin = Offset(1.0, 0.0);
+                    const end = Offset.zero;
+                    var tween = Tween(begin: begin, end: end);
+                    var offsetAnimation = animation.drive(tween);
+                    return SlideTransition(
+                      position: offsetAnimation,
+                      child: child,
+                    );
+                  },
+                  transitionDuration: Duration(milliseconds: 500),
                 ),
               );
             },
             child: RecipeCard(recipe: recipes[index]),
           );
-          return RecipeCard(recipe: recipes[index]);
         },
       ),
     );
