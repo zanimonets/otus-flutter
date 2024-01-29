@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:otus_home_2/styles/app_styles.dart';
 import '../objects/meals.dart';
+import '../state/providers.dart';
+import 'common_components/bookmark_indicator.dart';
 import 'food_image.dart';
 
-class RecipeCard extends StatelessWidget {
+class RecipeCard extends ConsumerWidget {
   final Recipe recipe;
 
-  const RecipeCard({super.key, required this.recipe});
+  const RecipeCard({Key? key, required this.recipe}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final bookmarkCounter = ref.watch(bookmarkCounterProvider(recipe.idMeal));
+
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(5.0),
@@ -19,7 +24,7 @@ class RecipeCard extends StatelessWidget {
         children: [
           Expanded(
             flex: 1,
-            child: FoodImage(imageUrl:recipe.strMealThumb!),
+            child: FoodImage(imageUrl: recipe.strMealThumb!),
           ),
           Expanded(
             flex: 2,
@@ -43,10 +48,11 @@ class RecipeCard extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        // recipe.cookingTime,
                         "Not defined",
                         style: AppStyles.recipeCardStyle.totalCookingTime,
                       ),
+                      Spacer(),
+                      BookmarkIndicator(recipeId: recipe.idMeal!)
                     ],
                   ),
                 ),

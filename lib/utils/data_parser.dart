@@ -5,7 +5,7 @@ import 'package:otus_home_2/services/api/meal_api_service.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class DataParse {
-  static Future<List<Recipe>> loadRecipes(BuildContext context) async {
+  static Future<List<Recipe>> loadRecipes() async {
     await Hive.initFlutter();
     Hive.registerAdapter(RecipeAdapter());
     final mealsBox = await Hive.openBox('meals_box');

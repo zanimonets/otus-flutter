@@ -1,30 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:otus_home_2/features/recipe_details/comments.dart';
 import 'package:otus_home_2/features/recipe_details/ingredients_list.dart';
 import 'package:otus_home_2/features/recipe_details/recipe_steps_list.dart';
 import 'package:rive/rive.dart';
 import '../objects/meals.dart';
+import '../state/providers.dart';
 import '../styles/app_styles.dart';
+import 'common_components/bookmark_indicator.dart';
 import 'food_image.dart';
 
-class RecipeDetailPage extends StatefulWidget {
+class RecipeDetailPage extends ConsumerWidget {
   final Recipe recipe;
+  StateMachineController? _riveController;
 
   RecipeDetailPage({Key? key, required this.recipe}) : super(key: key);
 
   @override
-  _RecipeDetailPageState createState() => _RecipeDetailPageState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isLiked = ref.watch(isLikedProvider(recipe.idMeal));
+    final bookmarkCounter = ref.watch(bookmarkCounterProvider(recipe.idMeal));
 
-class _RecipeDetailPageState extends State<RecipeDetailPage> {
-  SMIBool? _isChecked;
-  bool _isFavorite = false;
-  bool _isBookmarked = false;
-  int bookmarkCounter = 0;
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -54,20 +51,21 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                 children: [
                   Expanded(
                     child: Text(
-                      widget.recipe.strMeal!,
+                      recipe.strMeal!,
                       style: AppStyles.recipeCardStyle.label,
                     ),
                   ),
                   const SizedBox(width: 8.0),
                   GestureDetector(
-                    onTap: _onTapLikeIcon,
+                    onTap: () => _onTapLikeIcon(context, ref),
                     child: Container(
                       padding: EdgeInsets.all(16.0),
                       width: 60.0,
                       height: 60.0,
                       child: RiveAnimation.asset(
                         'assets/rive/heart.riv',
-                        onInit: _onRiveLikeIconInit,
+                        onInit: (artboard) =>
+                            _onRiveLikeIconInit(artboard, ref, recipe.idMeal!),
                       ),
                     ),
                   ),
@@ -86,7 +84,6 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                         ),
                       ),
                       Text(
-                        // widget.recipe.cookingTime,
                         "Not defined",
                         style: AppStyles.recipeCardStyle.totalCookingTime,
                       ),
@@ -99,38 +96,11 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                           width: double.infinity,
                           height: 320.0,
                           color: Colors.white,
-                          child:
-                              FoodImage(imageUrl: widget.recipe.strMealThumb!)
-                         ),
-                      if (bookmarkCounter > 0)
-                        Positioned(
+                          child: FoodImage(imageUrl: recipe.strMealThumb!)),
+                      Positioned(
                           right: 0,
                           bottom: 10.0,
-                          child: Row(
-                            children: [
-                              Transform.rotate(
-                                angle: 1.5708,
-                                child: Transform.scale(
-                                  scaleY: 2.0,
-                                  child: Icon(
-                                    Icons.bookmark,
-                                    color: _isBookmarked
-                                        ? AppStyles.primaryGreenColor
-                                        : AppStyles.primaryGreyColor,
-                                  ),
-                                ),
-                              ),
-                              Text(
-                                bookmarkCounter.toString(),
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 12.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                          child: BookmarkIndicator(recipeId: recipe.idMeal!))
                     ],
                   ),
                 ],
@@ -157,7 +127,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [IngredientsList(recipe: widget.recipe)],
+                children: [IngredientsList(recipe: recipe)],
               ),
             ),
             const ListTile(
@@ -169,7 +139,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                 ),
               ),
             ),
-            RecipeStepsList(recipe: widget.recipe),
+            RecipeStepsList(recipe: recipe),
             const RecipeComments(),
           ],
         ),
@@ -177,24 +147,33 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
     );
   }
 
+  void _onTapLikeIcon(BuildContext context, WidgetRef ref) {
+    final currentState =
+        ref.read(isLikedProvider(recipe.idMeal).notifier).state;
+    ref.read(isLikedProvider(recipe.idMeal).notifier).state = !currentState;
 
-  void _onTapLikeIcon() {
-    _isChecked!.value = !_isChecked!.value;
+    if (!currentState) {
+      ref.read(bookmarkCounterProvider(recipe.idMeal).notifier).state++;
+    } else {
+      ref.read(bookmarkCounterProvider(recipe.idMeal).notifier).state--;
+    }
 
-    setState(() {
-      _isBookmarked = _isChecked!.value;
-      if (_isBookmarked) {
-        bookmarkCounter++;
-      } else {
-        bookmarkCounter = 0;
-      }
-    });
+    final isCheckedInput = _riveController?.findInput<bool>('Checked');
+    if (isCheckedInput is SMIBool) {
+      isCheckedInput.value = !currentState;
+    }
   }
 
-  void _onRiveLikeIconInit(Artboard artboard) {
-    final controller = StateMachineController.fromArtboard(artboard,'State Machine 1',);
-    artboard.addController(controller!);
-    _isChecked = controller.findInput<bool>('Checked') as SMIBool;
-    _isChecked!.value = false;
+  void _onRiveLikeIconInit(Artboard artboard, WidgetRef ref, String idMeal) {
+    _riveController =
+        StateMachineController.fromArtboard(artboard, 'State Machine 1');
+    if (_riveController != null) {
+      artboard.addController(_riveController!);
+      final isCheckedInput = _riveController!.findInput<bool>('Checked');
+      if (isCheckedInput is SMIBool) {
+        final isLiked = ref.read(isLikedProvider(idMeal).notifier).state;
+        isCheckedInput.value = isLiked;
+      }
+    }
   }
 }
