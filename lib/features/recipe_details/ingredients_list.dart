@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../objects/recipe.dart';
+import '../../objects/meals.dart';
 import '../../styles/app_styles.dart';
 
 class IngredientsList extends StatelessWidget {
@@ -11,7 +11,7 @@ class IngredientsList extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<Widget> ingredientWidgets = [];
 
-    for (final ingredient in recipe.ingredients) {
+    for (final ingredient in recipe.getIngredients()) {
       ingredientWidgets.add(
         Padding(
           padding: const EdgeInsets.only(bottom: 3.0),
@@ -20,7 +20,7 @@ class IngredientsList extends StatelessWidget {
             children: [
               Text('\u2022 ${ingredient['name']}',
                   style: AppStyles.ingredientsStyle.name),
-              Text(ingredient['amount'],
+              Text(ingredient['amount']!,
                   style: AppStyles.ingredientsStyle.amount),
             ],
           ),
@@ -29,7 +29,7 @@ class IngredientsList extends StatelessWidget {
     }
 
     return ListView(
-      scrollDirection: Axis.vertical,
+      physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       children: ingredientWidgets,
     );
