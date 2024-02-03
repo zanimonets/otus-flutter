@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../objects/meals.dart';
-import '../../styles/app_styles.dart';
-import 'ingredient_step_checkbox.dart';
+import 'package:otus_home_2/features/recipe_details/ingredient_step_checkbox.dart';
+import 'package:otus_home_2/objects/meals.dart';
+import 'package:otus_home_2/constants/app_styles.dart';
 
 class RecipeStepsList extends StatefulWidget {
   final Recipe recipe;
@@ -69,9 +69,7 @@ class RecipeStepsListState extends State<RecipeStepsList> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Container(
-                      child: IngredientStepCheckbox(),
-                    ),
+                    const IngredientStepCheckbox(),
                     Text(time, style: AppStyles.recipeStepsStyle.time),
                   ],
                 ),

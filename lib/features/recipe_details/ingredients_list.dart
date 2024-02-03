@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../objects/meals.dart';
-import '../../styles/app_styles.dart';
+import 'package:otus_home_2/objects/meals.dart';
+import 'package:otus_home_2/constants/app_styles.dart';
 
 class IngredientsList extends StatelessWidget {
   final Recipe recipe;

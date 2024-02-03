@@ -1,8 +1,9 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:otus_home_2/features/recipe_details/photo_view_screen.dart';
-import '../../styles/app_styles.dart';
+
 import 'package:image_picker/image_picker.dart';
+import 'package:otus_home_2/constants/app_styles.dart';
 import 'package:path_provider/path_provider.dart';
 
 class RecipeComment {
@@ -67,7 +68,7 @@ class RecipeCommentsState extends State<RecipeComments> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 310,
       child: Column(
         children: [
@@ -98,7 +99,7 @@ class RecipeCommentsState extends State<RecipeComments> {
                     ],
                   ),
                   trailing: IconButton(
-                    icon: Icon(Icons.delete),
+                    icon: const Icon(Icons.delete),
                     onPressed: () {
                       setState(() {
                         deleteComment(index);
@@ -145,7 +146,7 @@ class RecipeCommentsState extends State<RecipeComments> {
                     backgroundColor: AppStyles.primaryGreenColor,
                   ),
                   onPressed: _handleCommentSubmit,
-                  child: Text('Отправить'),
+                  child: const Text('Отправить'),
                 ),
                 const SizedBox(height: 16.0),
               ],

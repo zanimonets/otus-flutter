@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
 class IngredientStepCheckbox extends StatefulWidget {
+  const IngredientStepCheckbox({super.key});
+
   @override
-  _IngredientStepCheckboxState createState() => _IngredientStepCheckboxState();
+  IngredientStepCheckboxState createState() => IngredientStepCheckboxState();
 }
 
-class _IngredientStepCheckboxState extends State<IngredientStepCheckbox> with SingleTickerProviderStateMixin {
+class IngredientStepCheckboxState extends State<IngredientStepCheckbox> with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _scaleAnimation;
 
@@ -17,7 +19,7 @@ class _IngredientStepCheckboxState extends State<IngredientStepCheckbox> with Si
 
     _animationController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 300),
     );
 
     _scaleAnimation = Tween<double>(begin: 1.0, end: 2.0).animate(
