@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../objects/meals.dart';
 import '../../styles/app_styles.dart';
+import 'ingredient_step_checkbox.dart';
 
 class RecipeStepsList extends StatefulWidget {
   final Recipe recipe;
@@ -68,15 +69,8 @@ class RecipeStepsListState extends State<RecipeStepsList> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Checkbox(
-                      value: isChecked,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          stepCheckedList[index] = value ?? false;
-                        });
-                      },
-                      activeColor: Colors.grey,
-                      checkColor: Colors.white,
+                    Container(
+                      child: IngredientStepCheckbox(),
                     ),
                     Text(time, style: AppStyles.recipeStepsStyle.time),
                   ],

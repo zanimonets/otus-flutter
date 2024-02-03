@@ -1,17 +1,22 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:otus_home_2/features/recipe_details/photo_view_screen.dart';
 import '../../styles/app_styles.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 
 class RecipeComment {
   final String author;
   final String text;
+  final String? imagePath;
 
-  RecipeComment(this.author, this.text);
+  RecipeComment(this.author, this.text, {this.imagePath});
 }
 
 List<RecipeComment> _comments = [];
 
-void addComment(String author, String text) {
-  _comments.add(RecipeComment(author, text));
+void addComment(String author, String text, {String? imagePath}) {
+  _comments.add(RecipeComment(author, text, imagePath: imagePath));
 }
 
 void deleteComment(int index) {
@@ -28,15 +33,35 @@ class RecipeComments extends StatefulWidget {
 class RecipeCommentsState extends State<RecipeComments> {
   final TextEditingController _authorController = TextEditingController();
   final TextEditingController _textController = TextEditingController();
+  final ImagePicker _imagePicker = ImagePicker();
+  String? _imagePath;
 
   void _handleCommentSubmit() {
     final author = _authorController.text;
     final text = _textController.text;
     if (author.isNotEmpty && text.isNotEmpty) {
-      addComment(author, text);
+      addComment(author, text, imagePath: _imagePath);
       _authorController.clear();
       _textController.clear();
+      _imagePath = null;
       setState(() {});
+    }
+  }
+
+  Future<void> _takePhoto() async {
+    final XFile? pickedImage = await _imagePicker.pickImage(source: ImageSource.camera);
+
+    if (pickedImage != null) {
+      final appDocDir = await getApplicationDocumentsDirectory();
+      final dirPath = '${appDocDir.path}/photos';
+      await Directory(dirPath).create(recursive: true);
+
+      final newPath = '$dirPath/${DateTime.now().millisecondsSinceEpoch}.jpg';
+      File(pickedImage.path).copySync(newPath);
+
+      setState(() {
+        _imagePath = newPath;
+      });
     }
   }
 
@@ -48,18 +73,36 @@ class RecipeCommentsState extends State<RecipeComments> {
         children: [
           Expanded(
             child: ListView.builder(
-              scrollDirection: Axis.vertical,
               itemCount: _comments.length,
               itemBuilder: (context, index) {
                 final comment = _comments[index];
                 return ListTile(
                   title: Text(comment.author),
-                  subtitle: Text(comment.text),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(comment.text),
+                      if (comment.imagePath != null)
+                        Center(
+                          child: GestureDetector(
+                            onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                              builder: (_) => PhotoViewScreen(imagePath: comment.imagePath!),
+                            )),
+                            child: Image.file(
+                              File(comment.imagePath!),
+                              width: 100,
+                              height: 110,
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
                   trailing: IconButton(
                     icon: Icon(Icons.delete),
                     onPressed: () {
-                      deleteComment(index);
-                      setState(() {});
+                      setState(() {
+                        deleteComment(index);
+                      });
                     },
                   ),
                 );
@@ -74,13 +117,26 @@ class RecipeCommentsState extends State<RecipeComments> {
                 TextField(
                   controller: _authorController,
                   decoration: const InputDecoration(
-                    labelText: 'Имя',
+                    labelText: '* Имя',
                   ),
                 ),
                 TextField(
                   controller: _textController,
-                  decoration: const InputDecoration(
-                    labelText: 'Оставить комментарий',
+                  decoration: InputDecoration(
+                    labelText: '* Оставить комментарий',
+                    suffixIcon: GestureDetector(
+                      onTap: () {
+                        _takePhoto();
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Image.asset(
+                          'assets/images/makePhotoIcon.png',
+                          width: 24.0,
+                          height: 24.0,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 16.0),

@@ -18,7 +18,6 @@ class DataParse {
       try {
         allMealsJsonData = await mealService.fetchAllMeals();
         mealsBox.put('data', allMealsJsonData);
-
       } catch (e) {
         debugPrint('!!! DEBUG DataParse: $e');
       }
