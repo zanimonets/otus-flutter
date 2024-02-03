@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../state/providers.dart';
-import '../../styles/app_styles.dart';
+import 'package:otus_home_2/state/providers.dart';
+import 'package:otus_home_2/constants/app_styles.dart';
 
 class BookmarkIndicator extends ConsumerWidget {
   final String recipeId;

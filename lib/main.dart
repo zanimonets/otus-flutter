@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:otus_home_2/objects/meals.dart';
 import 'package:otus_home_2/state/providers.dart';
-import 'package:otus_home_2/styles/app_styles.dart';
+import 'package:otus_home_2/constants/app_styles.dart';
 import 'features/recipe_list_page.dart';
 
 void main() {

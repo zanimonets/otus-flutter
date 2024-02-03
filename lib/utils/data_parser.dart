@@ -19,7 +19,7 @@ class DataParse {
         allMealsJsonData = await mealService.fetchAllMeals();
         mealsBox.put('data', allMealsJsonData);
       } catch (e) {
-        debugPrint('!!! DEBUG DataParse: $e');
+        debugPrint('DEBUG DataParse: $e');
       }
     } else {
       if (mealsBox.containsKey('data')) {

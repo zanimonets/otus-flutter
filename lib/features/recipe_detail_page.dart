@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:otus_home_2/constants/label_constants.dart';
+import 'package:otus_home_2/features/common_components/bookmark_indicator.dart';
+import 'package:otus_home_2/features/food_image.dart';
 import 'package:otus_home_2/features/recipe_details/comments.dart';
 import 'package:otus_home_2/features/recipe_details/ingredients_list.dart';
 import 'package:otus_home_2/features/recipe_details/recipe_steps_list.dart';
+import 'package:otus_home_2/objects/meals.dart';
+import 'package:otus_home_2/state/providers.dart';
+import 'package:otus_home_2/constants/app_styles.dart';
 import 'package:rive/rive.dart';
-import '../objects/meals.dart';
-import '../state/providers.dart';
-import '../styles/app_styles.dart';
-import 'common_components/bookmark_indicator.dart';
-import 'food_image.dart';
 
 class RecipeDetailPage extends ConsumerWidget {
   final Recipe recipe;
@@ -51,7 +52,7 @@ class RecipeDetailPage extends ConsumerWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      recipe.strMeal!,
+                      recipe.strMeal ?? LabelConstants.notDefined,
                       style: AppStyles.recipeCardStyle.label,
                     ),
                   ),
@@ -84,7 +85,7 @@ class RecipeDetailPage extends ConsumerWidget {
                         ),
                       ),
                       Text(
-                        "Not defined",
+                        LabelConstants.notDefined,
                         style: AppStyles.recipeCardStyle.totalCookingTime,
                       ),
                     ],
